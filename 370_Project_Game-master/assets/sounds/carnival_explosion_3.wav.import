@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/carnival_explosion_3.wav-f616a965de766690489f4c6da3ae46db.sample"
+
+[deps]
+
+source_file="res://assets/sounds/carnival_explosion_3.wav"
+dest_files=[ "res://.import/carnival_explosion_3.wav-f616a965de766690489f4c6da3ae46db.sample" ]
+
+[params]
+
+force/8_bit=true
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

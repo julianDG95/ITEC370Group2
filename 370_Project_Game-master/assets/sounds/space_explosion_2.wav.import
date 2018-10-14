@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/space_explosion_2.wav-44cf4a7bf0545f368773e027a3b61354.sample"
+
+[deps]
+
+source_file="res://assets/sounds/space_explosion_2.wav"
+dest_files=[ "res://.import/space_explosion_2.wav-44cf4a7bf0545f368773e027a3b61354.sample" ]
+
+[params]
+
+force/8_bit=true
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0
