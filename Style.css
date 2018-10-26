@@ -1,0 +1,57 @@
+@charset "utf-8";
+/* CSS Document */
+body{
+	background-color: rgba(23, 23, 23, 0.85);
+	color:#8F98A0;
+	font-size:16px;
+}
+/*login styles*/
+.login{
+	margin: auto;
+    width:300px;
+    background-color:rgba(0, 0, 0, 0.5);
+	border: 1px solid rgba(0, 0, 0, 0.5);
+    padding: 10px;
+}
+
+
+/*Admin page styles*/
+.columns{
+	box-sizing: border-box;
+	width:300px;
+	/*background:rgba(0, 0, 0, 0.5);*/
+	/*border: 1px solid rgba(0, 0, 0, 0.5);*/
+}
+.col-sm-8{
+	box-sizing: border-box;
+}
+.update{
+	background-color:rgba(0, 0, 0, 0.5);
+	border: 1px solid rgba(0, 0, 0, 0.5);
+}
+.panel{
+	padding-left:4px;
+	text-align:justify;
+	background:rgba(0, 0, 0, 0.5);
+	border: 1px solid rgba(0, 0, 0, 0.5);
+}
+h4{
+	text-align:center;
+}
+
+td{
+	padding: 10px 10px 10px 20px;
+	text-align: left;
+}
+input[type=submit], input[type=button] {
+    /*width: 75%;*/
+	color:#000;
+	
+	background-color:#CCC;
+    padding: 5px 5px;
+    margin: 2px 35px;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
