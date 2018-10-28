@@ -52,7 +52,7 @@ function FindUser()
          <td>Password:</td>
        </tr>
        <tr>
-         <td><input type="text" id="pWord" name="PWord"/></td>
+         <td><input type="password" id="pWord" name="PWord"/></td>
        </tr>
        <tr>
          <td><button type="submit" name="submit">Login</button></td>
