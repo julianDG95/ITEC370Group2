@@ -38,7 +38,11 @@ function logout()
     <form method="post" action="">
       <table class="update">
          <tr>
-           <td>Velocity Speed:</td>
+           <td>Target Distance:</td>
+           <td><input type="number" name="TDist"/></td>
+         </tr>
+         <tr>
+           <td>Speed:</td>
            <td><input type="number" name="VSpeed"/></td>
          </tr>
          <tr>
