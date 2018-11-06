@@ -19,14 +19,15 @@ jsonFile.close()                      # Close the JSON file, this removing the c
 
 i = 0
 userIn = getSizeValueFromString(sys.argv[1])
+str = sys.argv[1]
 
-if '-' in userIn
+if '-' in str:
     min = double(userIn[0])
     max = double(userIn[1])
     for n in data:
         data[i]["SIZE"] = round(random.uniform(min,max), 1)
         i = i + 1
-else 
+else:
     for n in data:
         data[i]["SIZE"] = userIn
         i = i + 1

@@ -20,12 +20,18 @@ jsonFile.close()                      # Close the JSON file, this removing the c
 i = 0
 userIn = getDistanceValueFromString(sys.argv[1])
 print userIn
-min = int(userIn[0])
-max = int(userIn[1])
-for n in data:
-   data[i]["DIST"] = random.randint(min, max)
-   i = i + 1
 
+if '-' in sys.argv[1]:
+    min = int(userIn[0])
+    max = int(userIn[1])
+    for n in data:
+        data[i]["SPEED"] = random.randint(min, max)
+        i = i + 1
+else:
+    for n in data:
+        data[i]["SPEED"] = userIn
+        i = i + 1
+         
 jsonFile = open('targetFile.json', 'w+')
 jsonFile.write(json.dumps(data))
 jsonFile.close()

@@ -19,14 +19,15 @@ jsonFile.close()                      # Close the JSON file, this removing the c
 
 i = 0
 userIn = getDistanceValueFromString(sys.argv[1])
+str = sys.argv[1]
 
-if '-' in userIn
+if '-' in str:
     min = int(userIn[0])
     max = int(userIn[1])
     for n in data:
         data[i]["DIST"] = random.randint(min, max)
         i = i + 1
-else 
+else: 
     for n in data:
         data[i]["DIST"] = userIn
         i = i + 1

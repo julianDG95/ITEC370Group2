@@ -20,12 +20,12 @@ jsonFile.close()                      # Close the JSON file, this removing the c
 i = 0
 userIn = getDirectionValueFromString(sys.argv[1])
 
-if ',' in sys.argv[1]
+if ',' in sys.argv[1]:
     for n in data:
     	rand = random.randInt(0, len(userIn))
         data[i]["DIR"] = userIn[rand]
         i = i + 1
-else 
+else:
     for n in data:
         data[i]["DIR"] = userIn
         i = i + 1
