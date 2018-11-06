@@ -22,7 +22,7 @@ userIn = getDirectionValueFromString(sys.argv[1])
 
 if ',' in sys.argv[1]:
     for n in data:
-    	rand = random.randInt(0, len(userIn))
+    	rand = random.randint(0, len(userIn)-1)
         data[i]["DIR"] = userIn[rand]
         i = i + 1
 else:

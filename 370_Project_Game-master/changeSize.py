@@ -22,14 +22,14 @@ userIn = getSizeValueFromString(sys.argv[1])
 str = sys.argv[1]
 
 if '-' in str:
-    min = double(userIn[0])
-    max = double(userIn[1])
+    min = float(userIn[0])
+    max = float(userIn[1])
     for n in data:
         data[i]["SIZE"] = round(random.uniform(min,max), 1)
         i = i + 1
 else:
     for n in data:
-        data[i]["SIZE"] = userIn
+        data[i]["SIZE"] = round(float(userIn), 1)
         i = i + 1
 
 jsonFile = open('targetFile.json', 'w+')
