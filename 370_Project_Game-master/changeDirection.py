@@ -6,28 +6,30 @@ import random
 import json
 import sys
 
-def getDistanceValueFromString(str):
-    if ',' in str:
-        splitList = str.split(',') 
-    else:  ## Only one direction supplied
-        splitList str
+def getDirectionValueFromString(str):
+    if ',' in str: 
+        splitList = str.split(',')
+    else:
+        splitList = str # Single allowed direction, large distances can cause problems
     return splitList
 
-jsonFile = open('testFile.json', 'r') # Open the JSON file for reading
-data = json.load(jsonFile)            # Read the JSON into the buffer
-jsonFile.close()                      # Close the JSON file
+jsonFile = open('targetFile.json', 'r')
+data = json.load(jsonFile)            # Cursor at end of JSON file
+jsonFile.close()                      # Close the JSON file, this removing the cursor
 
-## Working with buffered content
 i = 0
-directionList = getDistanceValueFromString(sys.argv[1])
-dirLength = len(directionList)
-for n in data:
-    r = random.randint(0,dirLength-1)
-    data[i]["DIR"] = directionList[r]
-    i = i + 1
-## Error check
-## If error encountered return false, no write preformed
-## Save our changes to JSON file
-jsonFile = open('testFile.json', 'w+')
+userIn = getDirectionValueFromString(sys.argv[1])
+
+if ',' in sys.argv[1]
+    for n in data:
+    	rand = random.randInt(0, len(userIn))
+        data[i]["DIR"] = userIn[rand]
+        i = i + 1
+else 
+    for n in data:
+        data[i]["DIR"] = userIn
+        i = i + 1
+
+jsonFile = open('targetFile.json', 'w+')
 jsonFile.write(json.dumps(data))
 jsonFile.close()
