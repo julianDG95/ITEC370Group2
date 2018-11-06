@@ -6,9 +6,7 @@ import json
 import sys
 
 def getDistanceValueFromString(str):
-    if ',' in str:
-        splitList = str.split(',') 
-    elif '-' in str: 
+    if '-' in str: 
         splitList = str.split('-')
     else:
         splitList = str

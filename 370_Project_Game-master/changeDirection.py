@@ -10,14 +10,14 @@ def getDistanceValueFromString(str):
     if ',' in str:
         splitList = str.split(',') 
     else:  ## Only one direction supplied
-        splitList = str
+        splitList str
     return splitList
 
 jsonFile = open('testFile.json', 'r') # Open the JSON file for reading
 data = json.load(jsonFile)            # Read the JSON into the buffer
 jsonFile.close()                      # Close the JSON file
 
-    ## Working with buffered content
+## Working with buffered content
 i = 0
 directionList = getDistanceValueFromString(sys.argv[1])
 dirLength = len(directionList)
