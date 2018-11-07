@@ -13,20 +13,31 @@
 <!--Should be a validation check here ( in javascript block) -->
 
 <script>
-
 //Sends user back to login page
 function logout()
 {
 	location.replace('http://localhost/370_Project/login.php');
 }
-
 </script>
 
 
 <?php 
 if(isset($_POST['submit'])){
+  //distance
   $newDistanceString = $_POST['DistanceField'];
-  exec("python changeDistance.py $newDistanceString")){
+  exec("python changeDistance.py $newDistanceString");
+  
+  //direction
+  $newDirectionString = $_POST['DirectionField'];
+  exec("python changeDirection.py $newDirectionString");
+  
+  //size
+  $newSizeString = $_POST['size'];
+  exec("python changeSize.py $newSizeString");
+  
+  //speed
+  $newSpeedString = $_POST['speed'];
+  exec("python changeSpeed.py $newSpeedString");
 }    
 ?>
 
@@ -40,7 +51,7 @@ if(isset($_POST['submit'])){
     <h4>Current Settings</h4>
     <p>Allowed Speed: <?php echo "Speed";?></p>
     <p>Allowed Directions: <?php echo "Directions";?></p>
-    <p>Allowed Distances: <? php echo "Distance";?></p>
+    <p>Allowed Distances: <?php echo "Distances";?></p>
     <p>Sizes: <?php echo "Sizes";?></p>
     <p>Skin: <?php echo "skin";?></p>
     <p>Game Mode: <?php echo "Mode";?></p>
@@ -88,7 +99,7 @@ if(isset($_POST['submit'])){
            <td>Game Mode:</td>
            <td>
              <select name="ModeSelect">
-               <option Value="Default"/>
+               <option value="Default">Default</option>
              </select>
            </td>
          </tr>
