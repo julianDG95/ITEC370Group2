@@ -21,24 +21,46 @@ function logout()
 </script>
 
 
-<?php 
-if(isset($_POST['submit'])){
-  //distance
-  $newDistanceString = $_POST['DistanceField'];
-  exec("python changeDistance.py $newDistanceString");
-  
-  //direction
-  $newDirectionString = $_POST['DirectionField'];
-  exec("python changeDirection.py $newDirectionString");
-  
-  //size
-  $newSizeString = $_POST['size'];
-  exec("python changeSize.py $newSizeString");
-  
-  //speed
-  $newSpeedString = $_POST['speed'];
-  exec("python changeSpeed.py $newSpeedString");
-}    
+<?php
+//Reset all variables
+$distanceNew = "";
+$directionNew = "";
+$speedNew = "";
+$sizeNew = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+	if (empty($_POST['distanceField'])) {
+		$distanceNew = "";
+	}else {
+		$distanceNew = $_POST['distanceField'];
+		shell_exec("python changeDistance.py $distanceNew");
+		echo 'Wrote distance to file.';
+	} 
+
+	if (empty($_POST['directionField'])) {
+		$directionNew = "";
+	}else {
+		$directionNew = $_POST['directionField'];
+		shell_exec("python changeDirection.py $directionNew");
+		echo 'Wrote direction to file.';
+	} 
+
+	if (empty($_POST['sizeField'])) {
+		$sizeNew = "";
+	}else {
+		$sizeNew = $_POST['sizeField'];
+		shell_exec("python changeSize.py $sizeNew");
+		echo 'Wrote size to file.';
+	} 
+
+	if (empty($_POST['speedField'])) {
+		$speedNew = "";
+	}else {
+		$speedNew = $_POST['speedField'];
+		shell_exec("python changeSpeed.py $speedNew");
+		echo 'Wrote speed to file.';
+	} 
+}  
 ?>
 
 
@@ -51,7 +73,7 @@ if(isset($_POST['submit'])){
     <h4>Current Settings</h4>
     <p>Allowed Speed: <?php echo "Speed";?></p>
     <p>Allowed Directions: <?php echo "Directions";?></p>
-    <p>Allowed Distances: <?php echo "Distances";?></p>
+    <p>Allowed Distances: <?php echo "distanceField";?></p>
     <p>Sizes: <?php echo "Sizes";?></p>
     <p>Skin: <?php echo "skin";?></p>
     <p>Game Mode: <?php echo "Mode";?></p>
@@ -61,39 +83,39 @@ if(isset($_POST['submit'])){
 
 <div class="container-fluid col-sm-6">
    <div class="panel">
-    <form method="post" action="">
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
       <table class="update">
          <tr>
            <td>Speed:</td> <!--Changes allowed speed interval, must be (0-999)-(0-999) --> 
-           <td><input type="number" name="Speed" pattern="[0-9]{1,3}[-]{1,1}[0-9]{1,3}"/></td> 
+           <td><input type="text" name="speedField" pattern="[0-9]{1,3}[-]{0,1}[0-9]{0,3}" value=""/></td> 
          </tr>
          <tr>
            <td>Direction:</td>
-           <td><input type="String" name="DirectionField" pattern="[N, E, S, W, NE, NW, SE, SW]{1}[[,][N, E, S, W, NE, NW, SE, SW]]"/></td>
+           <td><input type="text" name="directionField" pattern="[N, E, S, W, NE, NW, SE, SW]{1}[[,][N, E, S, W, NE, NW, SE, SW]]"/></td>
          </tr>
-		     <tr>
-			     <td>Distance:</td>
-			     <td><input type="String" name="DistanceField" pattern="0-9]{1,3}[-]{1,1}[0-9]{1,3}"/></td>
-		     </tr>
+	 <tr>
+	 	<td>Distance:</td>
+		<td><input type="text" name="distanceField" value=""/></td>
+	</tr>
          <tr>
            <td>Score Multiplier:</td> <!-- Changes score modifier, must be a decimal value that will multiply the default score per target clicked--> 
            <td><input type="number" name="ScoreMulti" pattern="[0-9]{1}[.]{1,1}[0-9]{1,3}"/></td>
          </tr>
          <tr>
            <td>Size:</td> <!-- Changes range of sizes, if only one size is allowed set both values to the same value-->
-           <td><input type="number" name="size" pattern="[0-9]{1}[-]{1,1}[0-9]{1,3}" /></td>
+           <td><input type="text" name="sizeField" /></td>
          </tr>
          <tr>
            <td>Time:</td> <!-- Set seconds, only allows 1-3 digits-->
-           <td><input type="number" name="time" pattern="[0-9]{1,3}"/></td>
+           <td><input type="text" name="timeField" pattern="[0-9]{1,3}"/></td>
          </tr>
          <tr>
            <td>Change Skin:</td> <!-- Choose skin via radio button -->
            <td><input type="radioButton" name="skinRadioBtn"></td>
          </tr>
          <tr>
-           <td>Change Sound:</td>
-           <td><input type="file" name="SoundBrowse"></td>
+           <td>Change Sound:</td>`
+           <td><input type="file" id="SoundBrowse"></td>
          </tr>
          <tr>
            <td>Game Mode:</td>
@@ -105,8 +127,9 @@ if(isset($_POST['submit'])){
          </tr>
          <tr>
            <td></td>
-           <td><input type="submit" value="Change Settings"/>
+           <td><input type="submit" name="submit" value="Change Settings"/>
          </tr>
+
       </table>
   </form>
  </div>
@@ -128,6 +151,8 @@ if(isset($_POST['submit'])){
     </form>
   </div>
 </div>
-    
+<?php
+echo $distanceNew
+?>    
 </body>
 </html>
