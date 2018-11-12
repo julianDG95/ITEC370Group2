@@ -107,7 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
          </tr>
          <tr>
            <td>Change Skin:</td> <!-- Choose skin via radio button -->
-           <td><input type="radio" name="skinRadioBtn"> Skin</td>
+           <td><input type="radio" name="skinRadioBtn" value="Skin"> Skin</td>
          </tr>
          <tr>
            <td>Change Sound:</td>`
