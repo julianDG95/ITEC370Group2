@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Login</title>
+<title>Change Password</title>
 <!--Bootstrap Styling-->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link href="Style.css" rel="stylesheet" type="text/css"/>
@@ -19,24 +19,21 @@ function ClearForm()
 <?php 
 if(isset($_POST['submit']))
 {	
-	echo FindUser();
+	echo changePass();
 }
 
-function FindUser()
+function changePass()
 {	
 	$User = htmlspecialchars($_POST['UName']);
-    $Pass = htmlspecialchars($_POST['PWord']);
-	$file = fopen("loginInfo.csv","r");
-	$success = false;
-	while (($row = fgetcsv($file, 0, ",")) !== FALSE)
+    $Pass = md5($_POST['PWord']);
+	$list = array($User,$Pass);
+	$file = fopen("loginInfo.csv", "w+");
+	foreach($list as $line)
 	{
-		if($row[0] == $User && $row[1] == $Pass)
-		{	
-			$success = true;
-			header( 'Location: http://localhost/370_Project/AdminPage.php' );
-		}
+		fputcsv($file,explode(',',$line));
 	}
-	return $success;
+	fclose($file);
+	header( 'Location: http://localhost/370_Project/login.php' );
 }
 ?>
 <div class="login">
@@ -48,17 +45,13 @@ function FindUser()
        <tr>
          <td><input type="text" id="uName" name="UName"/></td>
        </tr>
-       <tr>
-         <td>Password:</td>
+         <td>New Password:</td>
        </tr>
        <tr>
-         <td><input type="password" id="pWord" name="PWord"/></td>
+         <td><input type="password" id="newPWord" name="PWord"/></td>
        </tr>
        <tr>
-         <td><button type="submit" name="submit">Login</button></td>
-       </tr>
-       <tr>
-         <td><a href="http://localhost/370_Project/ChangePassword.php">Forgot Password?</a></td>
+         <td><button type="submit" name="submit">Change Password</button></td>
        </tr>
     </table>
 </form>
