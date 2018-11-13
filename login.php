@@ -25,7 +25,7 @@ if(isset($_POST['submit']))
 function FindUser()
 {	
 	$User = htmlspecialchars($_POST['UName']);
-    $Pass = htmlspecialchars($_POST['PWord']);
+    $Pass = md5($_POST['PWord']);
 	$file = fopen("loginInfo.csv","r");
 	$success = false;
 	while (($row = fgetcsv($file, 0, ",")) !== FALSE)
