@@ -18,6 +18,11 @@ function logout()
 {
 	location.replace('http://localhost/370_Project/login.php');
 }
+
+function getCurrentData()
+{
+
+
 </script>
 
 
@@ -27,40 +32,107 @@ $distanceNew = "";
 $directionNew = "";
 $speedNew = "";
 $sizeNew = "";
+$scoreNew = "";
+$skinNew = "";
+$timeLimitNew = "";
+$gameModeNew = "";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	if (empty($_POST['distanceField'])) {
-		$distanceNew = "";
-	}else {
+$currentDataJSON = file_get_contents('currentData.json');
+$currentData = json_decode($currentDataJSON, true);
+//echo '<pre>' . print_r($currentData, true) . '</pre>';
+
+
+$currentDirections = $currentData['0']["DIR"];
+$currentDistances = $currentData['0']["DIST"];
+$currentSpeed = $currentData['0']["SPEED"];
+$currentSizes = $currentData['0']["SIZE"];
+$currentScoreMulti = $currentData['0']["SCORE"];
+$currentSkin = $currentData['0']["SKIN"];
+$currentGameMode = $currentData['0']["MODE"];
+$currentTimeLimit = $currentData['0']["TIME"];	
+
+if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !isset($_POST['deleteBtn'])) {
+	if (!(empty($_POST['distanceField']))) {
 		$distanceNew = $_POST['distanceField'];
 		shell_exec("python changeDistance.py $distanceNew");
+		$currentData['0']["DIST"] = $distanceNew;
+		$currentDataJSON = json_encode($currentData);
+		file_put_contents('currentData.json', $currentDataJSON);
+		$currentSpeed = $speedNew;
 		echo 'Wrote distance to file.';
 	} 
 
-	if (empty($_POST['directionField'])) {
-		$directionNew = "";
-	}else {
+	if (!(empty($_POST['directionField']))) {
 		$directionNew = $_POST['directionField'];
 		shell_exec("python changeDirection.py $directionNew");
+		$currentData['0']["DIR"] = $directionNew;
+		$currentDataJSON = json_encode($currentData);
+		file_put_contents('currentData.json', $currentDataJSON);
+		$currentDirection = $directionNew;
 		echo 'Wrote direction to file.';
 	} 
 
-	if (empty($_POST['sizeField'])) {
-		$sizeNew = "";
-	}else {
+	if (!(empty($_POST['sizeField']))) {
 		$sizeNew = $_POST['sizeField'];
 		shell_exec("python changeSize.py $sizeNew");
+		$currentData['0']["SIZE"] = $sizeNew;
+		$currentDataJSON = json_encode($currentData);
+		file_put_contents('currentData.json', $currentDataJSON);
+		$currentSize = $sizeNew;
 		echo 'Wrote size to file.';
 	} 
 
-	if (empty($_POST['speedField'])) {
-		$speedNew = "";
-	}else {
+	if (!(empty($_POST['scoreField']))) {
+		$scoreNew = $_POST['scoreField'];
+		echo $scoreNew;
+		$currentData['0']["SCORE"] = $scoreNew;
+		$currentDataJSON = json_encode($currentData);
+		file_put_contents('currentData.json', $currentDataJSON);
+		$currentScore = $scoreNew;
+		echo 'Wrote score to file.';
+	}
+
+	if (!(empty($_POST['speedField']))) {
 		$speedNew = $_POST['speedField'];
 		shell_exec("python changeSpeed.py $speedNew");
+		$currentData['0']["SPEED"] = $speedNew;
+		$currentDataJSON = json_encode($currentData);
+		file_put_contents('currentData.json', $currentDataJSON);
+		$currentSpeed = $speedNew;
 		echo 'Wrote speed to file.';
-	} 
-}  
+	}
+
+	if (!(empty($_POST['timeField']))) {
+		$timeNew = $_POST['timeField'];
+		$currentData['0']["TIME"] = $timeNew;
+		$currentDataJSON = json_encode($currentData);
+		file_put_contents('currentData.json', $currentDataJSON);
+		$currentSpeed = $timeNew;
+		echo 'Wrote time to file.';
+	}  
+	//Always refreshes page
+	header("Refresh:0");
+}
+	if(isset($_POST['exportBtn'])){
+		echo 'Got export';		
+		$file = 'data.csv';
+		if(file_exists($file)){
+			header('Content-Type: text/csv');
+			header('Content-Length: '.filesize($file));
+			header('Content-Disposition: attachment; filename='.$file);
+			readfile($file);
+		exit;
+		}
+	}
+
+	if(isset($_POST['deleteBtn'])){
+		echo 'Got delete';		
+		$file = 'data.csv';
+		if(file_exists($file)){
+			rename($file, "backup.csv");	
+		}
+	}
+
 ?>
 
 
@@ -71,13 +143,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="container-fluid columns col-sm-4">
   <div class="panel">
     <h4>Current Settings</h4>
-    <p>Allowed Speed: <?php echo "Speed";?></p>
-    <p>Allowed Directions: <?php echo "Directions";?></p>
-    <p>Allowed Distances: <?php echo "distanceField";?></p>
-    <p>Sizes: <?php echo "Sizes";?></p>
-    <p>Skin: <?php echo "skin";?></p>
-    <p>Game Mode: <?php echo "Mode";?></p>
-    <p>Time Limit: <?php echo "Limit";?></p>
+    <p>Allowed Speed: <?php echo $currentSpeed;?></p>
+    <p>Allowed Directions: <?php echo $currentDirections;?></p>
+    <p>Allowed Distances: <?php echo $currentDistances;?></p>
+    <p>Score Multiplier: <?php echo $currentScoreMulti;?></p>
+    <p>Sizes: <?php echo $currentSizes;?></p>
+    <p>Time Limit: <?php echo $currentTimeLimit;?></p>
+    <p>Skin: <?php echo $currentSkin;?></p>
+    <p>Game Mode: <?php echo $currentGameMode;?></p>
+    
   </div>
 </div>
 
@@ -99,7 +173,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	</tr>
          <tr>
            <td>Score Multiplier:</td> <!-- Changes score modifier, must be a decimal value that will multiply the default score per target clicked--> 
-           <td><input type="number" name="ScoreMulti" pattern="[0-9]{1}[.]{1,1}[0-9]{1,3}"/></td>
+           <td><input type="number" name="scoreField" pattern="[0-9]{1}[.]{1,1}[0-9]{1,3}"/></td>
          </tr>
          <tr>
            <td>Size:</td> <!-- Changes range of sizes, if only one size is allowed set both values to the same value-->
@@ -139,20 +213,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <form method="post" action="">
       <table>
          <tr>
-           <td><input type="button" value="Export to CSV"/></td>
+           <td><input type="submit" class="button" name='exportBtn' value="Export to CSV"/></td>
          </tr>
          <tr>
-           <td><input type="button" value="Delete Current Database"/></td>
+           <td><input type="submit" name='deleteBtn' value="Delete Current Database"/></td>
          </tr>
          <tr>
-           <td><input type="button" value="Restore Database"/></td>
+           <td><input type="button" name='restoreBtn' value="Restore Database"/></td>
          </tr>
       </table>
     </form>
   </div>
-</div>
-<?php
-echo $distanceNew
-?>    
+</div>   
 </body>
 </html>
