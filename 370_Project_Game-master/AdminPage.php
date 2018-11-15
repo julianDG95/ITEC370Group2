@@ -18,13 +18,7 @@ function logout()
 {
 	location.replace('http://localhost/370_Project/login.php');
 }
-
-function getCurrentData()
-{
-
-
 </script>
-
 
 <?php
 //Reset all variables
