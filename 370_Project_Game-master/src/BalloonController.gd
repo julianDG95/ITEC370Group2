@@ -13,7 +13,7 @@
 
 extends Node2D
 
-onready var global = get_node("/root/G.lobal")
+onready var global = get_node("/root/Global")
 
 # Pixel Dist is the constant used by all screens to scale the targets
 export var PIXEL_DIST = 64
