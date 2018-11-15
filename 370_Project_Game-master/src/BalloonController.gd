@@ -49,6 +49,12 @@ var balloonNumber = 1
 var balloonID = -1
 var playing = true
 
+# Parse multiplier data from JSON
+var multiplierJSON = JSON.parse(currentData.json)
+var multiRaw = multiplierJSON.get_result()
+var multiplier = multiRaw[0]["SCORE"]
+
+
 # Tracks which targets have already been hit
 var targetsAlreadyHit = []
 
@@ -109,7 +115,7 @@ func mouseClicked(clickPosition):
 		current.queue_free()
 		targetVisible = false
 		
-		scoreLabel.addScore(int(100 * (10/(distance+1))))
+		scoreLabel.addScore(int(100 * (10 / (distance+1) * multiplier)))
 		
 		uploadTargetHit(balloonID, time, misses, balloonNumber)
 		
