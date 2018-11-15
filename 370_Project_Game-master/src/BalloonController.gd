@@ -13,7 +13,7 @@
 
 extends Node2D
 
-onready var global = get_node("/root/Global")
+onready var global = get_node("/root/G.lobal")
 
 # Pixel Dist is the constant used by all screens to scale the targets
 export var PIXEL_DIST = 64
@@ -48,12 +48,6 @@ var misses = 0
 var balloonNumber = 1
 var balloonID = -1
 var playing = true
-
-# Parse multiplier data from JSON
-var multiplierJSON = JSON.parse(currentData.json)
-var multiRaw = multiplierJSON.get_result()
-var multiplier = multiRaw[0]["SCORE"]
-
 
 # Tracks which targets have already been hit
 var targetsAlreadyHit = []

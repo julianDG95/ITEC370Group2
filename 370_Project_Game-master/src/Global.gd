@@ -40,6 +40,9 @@ var targetCount = 0
 # Is the target file done being parsed?
 var targetsParsed = false
 
+# Is the current data done being parsed?
+var currentDataParsed = false
+
 # User's Highest Score in all rounds
 var highestScore = 0
 
@@ -117,11 +120,25 @@ func parseTargetData( text ):
 		var t = TargetData.new( targetRaw[i]["ID"], targetRaw[i]["DIR"], targetRaw[i]["DIST"], targetRaw[i]["SIZE"])
 		targets.append(t)
 
-# Called when the HTTP Client downloads the target fata file
+# Called when the HTTP Client downloads the target data file
 func parseTargets( result ):
 	# parse the targets
 	parseTargetData( result )
 	targetsParsed = true
+
+# Parse multiplier data from HTTP downloaded JSON
+func parseCurrentData( text )  
+	var multiplierJSON = JSON.parse(text)
+	var multiRaw = multiplierJSON.get_result()
+	var multiplier = multiRaw[0]["SCORE"]
+
+# Called when the HTTP Client downloads the currentData file
+func parseCurrentDataset( result )  
+	parseCurrentData( result )
+	currentDataParsed = true
+
+
+
 
 # Create a new DB row and get a new ID for that row
 func getNewID():

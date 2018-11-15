@@ -27,6 +27,9 @@ func _ready():
 	#Download and parse the target JSON file
 	if !global.targetsParsed:
 		$HTTPRequest.request(global.address + "target_hunter/targetFile.json")
+	#Download and parse the currentData JSON file
+	if !global.currentDataParsed:
+		$HTTPRequest.request(global.address + "target_hunter/currentData.json")
 	
 	#Set the theme and background
 	$Panel.theme = global.currentTheme
@@ -49,6 +52,10 @@ func _on_High_Scores_pressed():
 #When the target file is done downloading, parse it
 func _on_HTTPRequest_request_completed(result, response_code, headers, body):
 	global.parseTargets( body.get_string_from_utf8() )
+
+#When the currentData file is done downloading, parse that
+func _on_HTTPRequest_request_completed(result, response_code, headers, body):
+	global.parseCurrentDataset(body.get_string_from_utf8() )
 
 
 #Change the theme based on which is currently is
