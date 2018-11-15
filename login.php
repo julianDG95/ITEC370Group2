@@ -11,11 +11,12 @@
 <script>
 function ClearForm()
 {
-    document.getElementById("LoginForm").reset();
+  document.getElementById("LoginForm").reset();
 	document.getElementById("uName").value= "";
 	document.getElementById("pWord").value= ""; 
 }
 </script>
+
 <?php 
 if(isset($_POST['submit']))
 {	
@@ -24,8 +25,9 @@ if(isset($_POST['submit']))
 
 function FindUser()
 {	
+  #uses SHA-256 to hash the password
 	$User = htmlspecialchars($_POST['UName']);
-    $Pass = md5($_POST['PWord']);
+  $Pass = hash("sha256", $_POST['PWord']);
 	$file = fopen("loginInfo.csv","r");
 	$success = false;
 	while (($row = fgetcsv($file, 0, ",")) !== FALSE)

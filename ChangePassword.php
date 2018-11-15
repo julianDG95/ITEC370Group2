@@ -11,7 +11,7 @@
 <script>
 function ClearForm()
 {
-    document.getElementById("LoginForm").reset();
+  document.getElementById("LoginForm").reset();
 	document.getElementById("uName").value= "";
 	document.getElementById("pWord").value= ""; 
 }
@@ -25,7 +25,7 @@ if(isset($_POST['submit']))
 function changePass()
 {	
 	$User = htmlspecialchars($_POST['UName']);
-    $Pass = md5($_POST['PWord']);
+  $Pass = hash("sha256", $_POST['PWord']);
 	$list = array($User,$Pass);
 	$file = fopen("loginInfo.csv", "w+");
 	foreach($list as $line)
