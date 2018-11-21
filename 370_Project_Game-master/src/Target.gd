@@ -20,6 +20,11 @@ export(Texture) var carnivalTex
 # Texture to use for the space theme
 export(Texture) var spaceTex
 
+export var deltaX = 0.0
+export var deltaY = 0.0
+
+var hasBeenHit = false
+
 # When the target loads, the theme is used to determine which texture to use
 func _ready():
 	# Set the theme to the space theme
@@ -29,3 +34,21 @@ func _ready():
 	# By default use the carnival theme
 	else:
 		$TargetSprite.texture = carnivalTex
+
+func setVelocity(dx, dy):
+	deltaX = dx
+	deltaY = dy
+
+func _process(delta):
+	position += Vector2(deltaX, deltaY) * delta
+
+func get_area():
+	return $Area2D
+
+
+func _on_Area2D_mouse_entered():
+	hasBeenHit = true
+
+
+func _on_Area2D_mouse_exited():
+	hasBeenHit = false

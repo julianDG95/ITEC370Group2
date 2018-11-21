@@ -12,7 +12,7 @@
 extends Node
 
 # Where to look for the target data at
-var address = "http://localhost:8080/"
+var address = "http://localhost:8080/target_hunter"
 
 # Target Class file
 var TargetData = preload("res://src/TargetData.gd")
@@ -114,11 +114,14 @@ func parseTargetData( text ):
 	
 	var targetRaw = p.get_result()
 	
-	# Parse each JSON Object into a Target Object
-	targetCount = targetRaw.size()
-	for i in range(0, targetRaw.size()):
-		var t = TargetData.new( targetRaw[i]["ID"], targetRaw[i]["DIR"], targetRaw[i]["DIST"], targetRaw[i]["SIZE"])
-		targets.append(t)
+	if typeof(targetRaw) == TYPE_ARRAY:
+		# Parse each JSON Object into a Target Object
+		targetCount = targetRaw.size()
+		for i in range(0, targetCount):
+			var t = TargetData.new( targetRaw[i]["ID"], targetRaw[i]["DIR"], targetRaw[i]["DIST"], targetRaw[i]["SIZE"])
+			targets.append(t)
+	else:
+		print("Error parsing Target JSON file.")
 
 # Called when the HTTP Client downloads the target data file
 func parseTargets( result ):
@@ -127,18 +130,15 @@ func parseTargets( result ):
 	targetsParsed = true
 
 # Parse multiplier data from HTTP downloaded JSON
-func parseCurrentData( text )  
+func parseCurrentData( text ):
 	var multiplierJSON = JSON.parse(text)
 	var multiRaw = multiplierJSON.get_result()
 	var multiplier = multiRaw[0]["SCORE"]
 
 # Called when the HTTP Client downloads the currentData file
-func parseCurrentDataset( result )  
+func parseCurrentDataset( result ):
 	parseCurrentData( result )
 	currentDataParsed = true
-
-
-
 
 # Create a new DB row and get a new ID for that row
 func getNewID():

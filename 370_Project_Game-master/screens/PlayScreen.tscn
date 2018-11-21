@@ -23,7 +23,7 @@
 [ext_resource path="res://src/ScoreLabel.gd" type="Script" id=21]
 [ext_resource path="res://themes/CarnivalTheme.tres" type="Theme" id=22]
 
-[node name="PlayScreen" type="Node" index="0"]
+[node name="PlayScreen" type="Node"]
 
 script = ExtResource( 1 )
 
@@ -40,7 +40,7 @@ margin_bottom = 117.0
 icon = ExtResource( 4 )
 _sections_unfolded = [ "Rect", "Theme", "Visibility", "custom_colors", "custom_fonts", "custom_styles" ]
 
-[node name="Balloon Controller" type="Node2D" parent="." index="2"]
+[node name="BalloonController" type="Node2D" parent="." index="2"]
 
 script = ExtResource( 5 )
 PIXEL_DIST = 64
@@ -192,7 +192,7 @@ _sections_unfolded = [ "Visibility" ]
 
 [connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
 
-[connection signal="pressed" from="RoundCompletePanel/PlayAgain" to="Balloon Controller" method="_on_PlayAgain_pressed"]
+[connection signal="pressed" from="RoundCompletePanel/PlayAgain" to="BalloonController" method="_on_PlayAgain_pressed"]
 
 [connection signal="pressed" from="RoundCompletePanel/Quit" to="." method="_on_Button_pressed"]
 
