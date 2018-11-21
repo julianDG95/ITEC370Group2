@@ -12,7 +12,7 @@
 extends Node
 
 # Where to look for the target data at
-var address = "http://localhost:8080/"
+var address = "http://localhost:8080/target_hunter"
 
 # Target Class file
 var TargetData = preload("res://src/TargetData.gd")
@@ -127,18 +127,15 @@ func parseTargets( result ):
 	targetsParsed = true
 
 # Parse multiplier data from HTTP downloaded JSON
-func parseCurrentData( text )  
+func parseCurrentData( text ):
 	var multiplierJSON = JSON.parse(text)
 	var multiRaw = multiplierJSON.get_result()
 	var multiplier = multiRaw[0]["SCORE"]
 
 # Called when the HTTP Client downloads the currentData file
-func parseCurrentDataset( result )  
+func parseCurrentDataset( result ):  
 	parseCurrentData( result )
 	currentDataParsed = true
-
-
-
 
 # Create a new DB row and get a new ID for that row
 func getNewID():
