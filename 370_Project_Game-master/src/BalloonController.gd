@@ -81,6 +81,8 @@ func _unhandled_input(event):
 
 # Handle the click/touch event
 func mouseClicked(clickPosition):
+	var area = current.get_area()
+	
 	# Ensure that the game is actually running
 	if !playing:
 		return
@@ -93,7 +95,7 @@ func mouseClicked(clickPosition):
 	add_child(t)
 	
 	# Test to see if the click is inside the target's bounds
-	if currentRect.has_point( clickPosition ):
+	if current.hasBeenHit:
 		# Display hit over the target
 		t.play("Hit!")
 		
@@ -109,7 +111,9 @@ func mouseClicked(clickPosition):
 		current.queue_free()
 		targetVisible = false
 		
-		scoreLabel.addScore(int(100 * (10 / (distance+1) * multiplier)))
+		#multipler not implemented
+		#scoreLabel.addScore(int(100 * (10 / (distance+1) * multiplier)))
+		scoreLabel.addScore(int(100 * (10 / (distance+1) )))
 		
 		uploadTargetHit(balloonID, time, misses, balloonNumber)
 		
@@ -152,15 +156,18 @@ func makeBalloon(spawnPos, sz):
 	
 	# Scale the target
 	var size = node.texture.get_size()
-	node.scale.x = sz.x / size.x
-	node.scale.y = sz.y / size.y
+	current.scale.x = 5 * sz.x / size.x
+	current.scale.y = 5 * sz.y / size.y
 	
 	# Move the target into position
 	focusPosition = current.position
 	var pos = current.position
 	pos.x -= sz.x/2
 	pos.y -= sz.y/2
-
+	
+	#give the balloon a random speed
+	current.setVelocity(rand_range(-25, 25), rand_range(-25, 25))
+	
 	# Create a rect for the target's bounds checking
 	currentRect = Rect2(pos, sz)
 	targetVisible = true

@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://src/Target.gd" type="Script" id=1]
 [ext_resource path="res://assets/balloons/balloon_blue.png" type="Texture" id=2]
 [ext_resource path="res://assets/aliens/shipBlue_manned.png" type="Texture" id=3]
+[ext_resource path="res://targets/Area2D.tscn" type="PackedScene" id=4]
 
 [node name="Target_V3" type="Node2D"]
 
@@ -10,11 +11,19 @@ script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]
 carnivalTex = ExtResource( 2 )
 spaceTex = ExtResource( 3 )
+deltaX = 0.0
+deltaY = 0.0
 
 [node name="TargetSprite" type="Sprite" parent="." index="0"]
 
 scale = Vector2( 0.2, 0.2 )
 texture = ExtResource( 2 )
 _sections_unfolded = [ "Offset", "Transform" ]
+
+[node name="Area2D" parent="." index="1" instance=ExtResource( 4 )]
+
+[connection signal="mouse_entered" from="Area2D" to="." method="_on_Area2D_mouse_entered"]
+
+[connection signal="mouse_exited" from="Area2D" to="." method="_on_Area2D_mouse_exited"]
 
 
