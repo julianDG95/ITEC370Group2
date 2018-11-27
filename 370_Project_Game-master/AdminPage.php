@@ -24,6 +24,7 @@ function logout()
 //Reset all variables
 $distanceNew = "";
 $directionNew = "";
+$velDirectionNew = "";
 $speedNew = "";
 $sizeNew = "";
 $scoreNew = "";
@@ -37,6 +38,7 @@ $currentData = json_decode($currentDataJSON, true);
 
 
 $currentDirections = $currentData['0']["DIR"];
+$currentVelDirections = $currentData['0']["VDIR"];
 $currentDistances = $currentData['0']["DIST"];
 $currentSpeed = $currentData['0']["SPEED"];
 $currentSizes = $currentData['0']["SIZE"];
@@ -65,7 +67,17 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
 		$currentDirection = $directionNew;
 		echo 'Wrote direction to file.';
 	} 
-
+	
+	if (!(empty($_POST['velocityDirectionField']))) {
+		$velDirectionNew = $_POST['velocityDirectionField'];
+		shell_exec("python changeVelocityDirection.py $velDirectionNew");
+		$currentData['0']["VDIR"] = $velDirectionNew;
+		$currentDataJSON = json_encode($currentData);
+		file_put_contents('currentData.json', $currentDataJSON);
+		$currentVelDirection = $velDirectionNew;
+		echo 'Wrote velocity direction to file.';
+	} 
+	
 	if (!(empty($_POST['sizeField']))) {
 		$sizeNew = $_POST['sizeField'];
 		shell_exec("python changeSize.py $sizeNew");
@@ -139,13 +151,15 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
     <h4>Current Settings</h4>
     <p>Allowed Speed: <?php echo $currentSpeed;?></p>
     <p>Allowed Directions: <?php echo $currentDirections;?></p>
+	<p>Allowed Velocity Directions: <?php echo $currentVelDirections;?></p>
     <p>Allowed Distances: <?php echo $currentDistances;?></p>
-    <p>Score Multiplier: <?php echo $currentScoreMulti;?></p>
     <p>Sizes: <?php echo $currentSizes;?></p>
+	<!--
     <p>Time Limit: <?php echo $currentTimeLimit;?></p>
+	<p>Score Multiplier: <?php echo $currentScoreMulti;?></p>
     <p>Skin: <?php echo $currentSkin;?></p>
     <p>Game Mode: <?php echo $currentGameMode;?></p>
-    
+    -->
   </div>
 </div>
 
@@ -161,24 +175,30 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
            <td>Direction:</td>
            <td><input type="text" name="directionField" pattern="[N, E, S, W, NE, NW, SE, SW]{1}[[,][N, E, S, W, NE, NW, SE, SW]]"/></td>
          </tr>
+		 <tr>
+           <td>Velocity Direction:</td>
+           <td><input type="text" name="velocityDirectionField" pattern="[N, E, S, W, NE, NW, SE, SW]{1}[[,][N, E, S, W, NE, NW, SE, SW]]"/></td>
+         </tr>
 	 <tr>
 	 	<td>Distance:</td>
 		<td><input type="text" name="distanceField" value=""/></td>
 	</tr>
-         <tr>
-           <td>Score Multiplier:</td> <!-- Changes score modifier, must be a decimal value that will multiply the default score per target clicked--> 
+         <!-- <tr>
+           <td>Score Multiplier:</td> <!-- Changes score modifier, must be a decimal value that will multiply the default score per target clicked-- 
            <td><input type="number" name="scoreField" pattern="[0-9]{1}[.]{1,1}[0-9]{1,3}"/></td>
-         </tr>
+         </tr> -->
          <tr>
            <td>Size:</td> <!-- Changes range of sizes, if only one size is allowed set both values to the same value-->
            <td><input type="text" name="sizeField" /></td>
          </tr>
+		 
+<!--	Comment out the currently unfunctional parts 
          <tr>
-           <td>Time:</td> <!-- Set seconds, only allows 1-3 digits-->
+           <td>Time:</td> <!-- Set seconds, only allows 1-3 digits--
            <td><input type="text" name="timeField" pattern="[0-9]{1,3}"/></td>
          </tr>
          <tr>
-           <td>Change Skin:</td> <!-- Choose skin via radio button -->
+           <td>Change Skin:</td> <!-- Choose skin via radio button --
            <td><input type="radioButton" name="skinRadioBtn"></td>
          </tr>
          <tr>
@@ -193,6 +213,7 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
              </select>
            </td>
          </tr>
+-->
          <tr>
            <td></td>
            <td><input type="submit" name="submit" value="Change Settings"/>
