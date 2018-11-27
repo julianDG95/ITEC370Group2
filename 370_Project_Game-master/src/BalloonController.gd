@@ -132,10 +132,10 @@ func mouseClicked(clickPosition):
 		misses += 1
 
 # Create a new target for the user
-func makeBalloon(spawnPos, sz):
+func makeBalloon(spawnPos, sz, speed, vdir):
 	# Generate random index
 	var i = randi() % numScenes
-	
+
 	# Select the new target
 	if i == 0:
 		current = redBalloon.instance()
@@ -145,29 +145,44 @@ func makeBalloon(spawnPos, sz):
 		current = blackBalloon.instance()
 	else:
 		current = greenBalloon.instance()
-	
+
 	print("Target Number: ", balloonNumber)
-	
+
 	current.position = spawnPos
 	add_child(current)
-	
+
 	# Get a reference to the target
 	var node = current.get_node("TargetSprite")
-	
+
 	# Scale the target
 	var size = node.texture.get_size()
 	current.scale.x = 5 * sz.x / size.x
 	current.scale.y = 5 * sz.y / size.y
-	
+
 	# Move the target into position
 	focusPosition = current.position
 	var pos = current.position
 	pos.x -= sz.x/2
 	pos.y -= sz.y/2
-	
-	#give the balloon a random speed
-	current.setVelocity(rand_range(-25, 25), rand_range(-25, 25))
-	
+
+	#create the velocity vector based on velocity (speed) and direction (vdir)
+	if   vdir == "N":
+		current.setVelocity(  0, -speed)
+	elif vdir == "S":
+		current.setVelocity(  0,  speed)
+	elif vdir == "E":
+		current.setVelocity(  speed, 0)
+	elif vdir == "W":
+		current.setVelocity( -speed, 0)
+	elif vdir == "SW":
+		current.setVelocity( -speed,  speed)
+	elif vdir == "SE":
+		current.setVelocity(  speed,  speed)
+	elif vdir == "NW":
+		current.setVelocity( -speed, -speed)
+	elif vdir == "NE":
+		current.setVelocity(  speed, -speed)
+
 	# Create a rect for the target's bounds checking
 	currentRect = Rect2(pos, sz)
 	targetVisible = true
@@ -211,7 +226,7 @@ func generateTarget():
 	var valid = false
 	var targetNum
 	var attempts = 0
-	
+
 	while !valid and attempts < 100:
 		targetNum = generateUniqueNumber()
 		
@@ -219,7 +234,8 @@ func generateTarget():
 		var direction = directionToVector(global.targets[targetNum].direction)
 		var size = float(global.targets[targetNum].size)
 		var distance = int(global.targets[targetNum].distance)
-		
+		var speed = float(global.targets[targetNum].speed)
+		var vdirection = global.targets[targetNum].vdirection
 		var pos = focusPosition + (direction * (distance-1) * (PIXEL_DIST - 10))
 		var rectSize = size * Vector2(PIXEL_DIST, PIXEL_DIST)
 		
@@ -228,13 +244,13 @@ func generateTarget():
 		valid = get_viewport_rect().encloses(testRect)
 		if valid:
 			#spawn the balloon
-			makeBalloon(pos, rectSize)
+			makeBalloon(pos, rectSize, speed, vdirection)
 		else:
 			#Sentry to avoid infinite looping
 			attempts += 1
 			if attempts > 10:
 				focusPosition = windowSize / 2
-	
+
 	if !valid && attempts >= 100:
 		print("Failed to place target")
 		print( targetsAlreadyHit )
@@ -247,15 +263,22 @@ func generateTarget():
 
 # Convert the plain text from the target into a vector direction
 func directionToVector( dir ):
-	if dir == "NE":
-		return Vector2(1, -1)
+	if   dir == "NE":
+		return Vector2( 1, -1)
 	elif dir == "NW":
 		return Vector2(-1, -1)
 	elif dir == "SE":
-		return Vector2(1, 1)
+		return Vector2( 1,  1)
 	elif dir == "SW":
-		return Vector2(-1, 1)
-
+		return Vector2(-1,  1)
+	elif dir == "E":
+		return Vector2( 1,  0)
+	elif dir == "W":
+		return Vector2(-1,  0)
+	elif dir == "S":
+		return Vector2( 0,  1)
+	elif dir == "N":
+		return Vector2( 0,  -1)
 
 # Generate an ID that hasn't been used yet
 func generateUniqueNumber():

@@ -14,14 +14,18 @@ var index
 var direction
 var distance
 var size
+var speed 
+var vdirection 
 
 # Create a new target based on the JSON data passed in
-func _init( i, dir, dis, sz):
+func _init( i, dir, dis, sz, sp, vdir):
 	index = i
 	direction = dir
 	distance = dis
 	size = sz
+	speed = sp
+	vdirection = vdir
 
 # Debug function to print the target's data that was read from the file
 func printData():
-	print("Target: ", index, " ", direction, " ", distance, " ", size)
+	print("Target: ", index, " ", direction, " ", distance, " ", size, " ", speed, " ", vdirection)

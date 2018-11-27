@@ -118,7 +118,7 @@ func parseTargetData( text ):
 		# Parse each JSON Object into a Target Object
 		targetCount = targetRaw.size()
 		for i in range(0, targetCount):
-			var t = TargetData.new( targetRaw[i]["ID"], targetRaw[i]["DIR"], targetRaw[i]["DIST"], targetRaw[i]["SIZE"])
+			var t = TargetData.new( targetRaw[i]["ID"], targetRaw[i]["DIR"], targetRaw[i]["DIST"], targetRaw[i]["SIZE"], targetRaw[i]["SPEED"], targetRaw[i]["VDIR"])
 			targets.append(t)
 	else:
 		print("Error parsing Target JSON file.")
