@@ -27,10 +27,6 @@ func _ready():
 	#Download and parse the target JSON file
 	if !global.targetsParsed:
 		$targetDownloader.request(global.address + "target_hunter/targetFile.json")
-	#Download and parse the currentData JSON file
-	# currentData.json system not implemented
-	#if !global.currentDataParsed:
-	#	$dataDownloader.request(global.address + "target_hunter/currentData.json")
 	
 	#Set the theme and background
 	$Panel.theme = global.currentTheme
