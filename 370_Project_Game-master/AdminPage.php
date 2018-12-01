@@ -31,12 +31,9 @@ $scoreNew = "";
 $skinNew = "";
 $timeLimitNew = "";
 $gameModeNew = "";
-
 $currentDataJSON = file_get_contents('currentData.json');
 $currentData = json_decode($currentDataJSON, true);
 //echo '<pre>' . print_r($currentData, true) . '</pre>';
-
-
 $currentDirections = $currentData['0']["DIR"];
 $currentVelDirections = $currentData['0']["VDIR"];
 $currentDistances = $currentData['0']["DIST"];
@@ -46,7 +43,6 @@ $currentScoreMulti = $currentData['0']["SCORE"];
 $currentSkin = $currentData['0']["SKIN"];
 $currentGameMode = $currentData['0']["MODE"];
 $currentTimeLimit = $currentData['0']["TIME"];	
-
 if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !isset($_POST['deleteBtn'])) {
 	if (!(empty($_POST['distanceField']))) {
 		$distanceNew = $_POST['distanceField'];
@@ -57,7 +53,6 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
 		$currentSpeed = $speedNew;
 		echo 'Wrote distance to file.';
 	} 
-
 	if (!(empty($_POST['directionField']))) {
 		$directionNew = $_POST['directionField'];
 		shell_exec("python changeDirection.py $directionNew");
@@ -87,7 +82,6 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
 		$currentSize = $sizeNew;
 		echo 'Wrote size to file.';
 	} 
-
 	if (!(empty($_POST['scoreField']))) {
 		$scoreNew = $_POST['scoreField'];
 		echo $scoreNew;
@@ -97,7 +91,6 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
 		$currentScore = $scoreNew;
 		echo 'Wrote score to file.';
 	}
-
 	if (!(empty($_POST['speedField']))) {
 		$speedNew = $_POST['speedField'];
 		shell_exec("python changeSpeed.py $speedNew");
@@ -107,7 +100,6 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
 		$currentSpeed = $speedNew;
 		echo 'Wrote speed to file.';
 	}
-
 	if (!(empty($_POST['timeField']))) {
 		$timeNew = $_POST['timeField'];
 		$currentData['0']["TIME"] = $timeNew;
@@ -130,7 +122,6 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
 		exit;
 		}
 	}
-
 	if(isset($_POST['deleteBtn'])){
 		echo 'Got delete';		
 		$file = 'data.csv';
@@ -138,13 +129,16 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
 			rename($file, "backup.csv");	
 		}
 	}
-
 ?>
 
-
+<h3 align="center">Target Acquisition Administrative Panel</h3>
 <div class="topnav">
-  <input type="button" syle="float:right" value="Logout" onClick="logout()"/>
+<ul>
+  <li><a href="admin.php">Game Data</a></li>
+  <li style="float:right"><input type="button" syle="float:right" value="Logout" onClick="logout()"/></li>
+</ul>
 </div>
+<br />
 <!--Current Settings-->
 <div class="container-fluid columns col-sm-4">
   <div class="panel">
@@ -166,22 +160,22 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
 <div class="container-fluid col-sm-6">
    <div class="panel">
     <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
-      <table class="update">
+      <table align="center" class="update">
          <tr>
            <td>Speed:</td> <!--Changes allowed speed interval, must be (0-999)-(0-999) --> 
-           <td><input type="text" name="speedField" pattern="[0-9]{1,3}[-]{0,1}[0-9]{0,3}" value=""/></td> 
+           <td><input type="text" name="speedField" pattern="[0-9]{1,3}[-]{0,1}[0-9]{0,3}" value="" placeholder="#-#"/></td> 
          </tr>
          <tr>
            <td>Direction:</td>
-           <td><input type="text" name="directionField" pattern="[N, E, S, W, NE, NW, SE, SW]{1}[[,][N, E, S, W, NE, NW, SE, SW]]"/></td>
+           <td><input type="text" name="directionField" pattern="[N, E, S, W, NE, NW, SE, SW]{1}[[,][N, E, S, W, NE, NW, SE, SW]]" placeholder="XX"/></td>
          </tr>
 		 <tr>
            <td>Velocity Direction:</td>
-           <td><input type="text" name="velocityDirectionField" pattern="[N, E, S, W, NE, NW, SE, SW]{1}[[,][N, E, S, W, NE, NW, SE, SW]]"/></td>
+           <td><input type="text" name="velocityDirectionField" pattern="[N, E, S, W, NE, NW, SE, SW]{1}[[,][N, E, S, W, NE, NW, SE, SW]]" placeholder="XX"/></td>
          </tr>
 	 <tr>
 	 	<td>Distance:</td>
-		<td><input type="text" name="distanceField" value=""/></td>
+		<td><input type="text" name="distanceField" value="" placeholder="#-#"/></td>
 	</tr>
          <!-- <tr>
            <td>Score Multiplier:</td> <!-- Changes score modifier, must be a decimal value that will multiply the default score per target clicked-- 
@@ -215,8 +209,7 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
          </tr>
 -->
          <tr>
-           <td></td>
-           <td><input type="submit" name="submit" value="Change Settings"/>
+           <td colspan="2"><input type="submit" name="submit" value="Change Settings"></td>
          </tr>
 
       </table>
@@ -239,6 +232,6 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
       </table>
     </form>
   </div>
-</div>   
+</div>
 </body>
 </html>

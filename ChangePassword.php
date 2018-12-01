@@ -36,6 +36,7 @@ function changePass()
 	header( 'Location: http://localhost/370_Project/login.php' );
 }
 ?>
+<br />
 <div class="login">
 <form action="" method="post" id="LoginForm">
     <table width="200" align="center" id="login" class="TLogin">
