@@ -56,7 +56,7 @@ var targetsAlreadyHit = []
 func _ready():
 	global.getNewID()
 	windowSize = get_viewport().size
-	
+	global.windowSize = windowSize
 	# Find the central location
 	focusPosition = windowSize / 2
 	balloonID = generateTarget()
@@ -164,7 +164,11 @@ func makeBalloon(spawnPos, sz, speed, vdir):
 	var pos = current.position
 	pos.x -= sz.x/2
 	pos.y -= sz.y/2
-
+	
+	# Create a rect for the target's bounds checking
+	currentRect = Rect2(pos, sz)
+	targetVisible = true
+	
 	#create the velocity vector based on velocity (speed) and direction (vdir)
 	if   vdir == "N":
 		current.setVelocity(  0, -speed)
@@ -183,9 +187,7 @@ func makeBalloon(spawnPos, sz, speed, vdir):
 	elif vdir == "NE":
 		current.setVelocity(  speed, -speed)
 
-	# Create a rect for the target's bounds checking
-	currentRect = Rect2(pos, sz)
-	targetVisible = true
+
 
 # Send target data and score to the DB
 func uploadTargetHit( num, time, miss, total):
@@ -233,6 +235,7 @@ func generateTarget():
 		# Convert the raw target data into real data
 		var direction = directionToVector(global.targets[targetNum].direction)
 		var size = float(global.targets[targetNum].size)
+		global.currentTargetSize = size * PIXEL_DIST
 		var distance = int(global.targets[targetNum].distance)
 		var speed = float(global.targets[targetNum].speed)
 		var vdirection = global.targets[targetNum].vdirection

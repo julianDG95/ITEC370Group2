@@ -34,6 +34,7 @@ func _ready():
 	# By default use the carnival theme
 	else:
 		$TargetSprite.texture = carnivalTex
+	print(global.windowSize)
 
 func setVelocity(dx, dy):
 	deltaX = dx
@@ -41,6 +42,18 @@ func setVelocity(dx, dy):
 
 func _process(delta):
 	position += Vector2(deltaX, deltaY) * delta
+	# Target loops if it goes out of bounds
+	if position.x <= 0 - global.currentTargetSize:
+		position += Vector2(global.windowSize.x + global.currentTargetSize, 0)
+	if position.y <= 0 - global.currentTargetSize:
+		position += Vector2( 0, global.windowSize.y + global.currentTargetSize)
+	if position.x > global.windowSize.x + global.currentTargetSize:
+		position -= Vector2(global.windowSize.x + global.currentTargetSize, 0)
+	if position.y > global.windowSize.y + global.currentTargetSize:
+		position -= Vector2(0, global.windowSize.y + global.currentTargetSize)
+	
+	print( position)
+
 
 func get_area():
 	return $Area2D

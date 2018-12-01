@@ -21,6 +21,9 @@ var TargetData = preload("res://src/TargetData.gd")
 var themeLabel = "Carnival"
 var availableThemes
 
+var windowSize
+var currentTargetSize = 0.0
+
 # Preload the theme files
 var currentTheme = preload("res://themes/CarnivalTheme.tres")
 var currentBackground = preload("res://assets/carnivalBG.jpg")
