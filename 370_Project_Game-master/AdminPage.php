@@ -1,6 +1,6 @@
 
 <?php
-include '../db_connect/createConnection.php';
+include '../target_hunter/db_connect/createConnection.php';
 $conn = ConnectToDB();
 $query = 'SELECT * FROM `test_data` ';
 $result = $conn->query($query);
@@ -86,14 +86,6 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn'])
 		echo 'Wrote speed to file.';
 	}
 	
-	if (!(empty($_POST['timeField']))) {
-		$timeNew = $_POST['timeField'];
-		$currentData['0']["TIME"] = $timeNew;
-		$currentDataJSON = json_encode($currentData);
-		file_put_contents('currentData.json', $currentDataJSON);
-		$currentSpeed = $timeNew;
-		echo 'Wrote time to file.';
-	}  
 	
 	//Always refreshes page
 	header("Refresh:0");
@@ -122,13 +114,13 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn'])
 	
 	if(isset($_POST['deleteBtn'])){
 		echo 'Got delete';		
-		include '../db_connect/databaseController.php';
+		include 'C:/xampp/htdocs/target_hunter/db_connect/databaseController.php';
 		DeleteData();
 	}
 	
 	if(isset($_POST['restoreBtn'])){
 		echo 'Got restore';		
-		include '../db_connect/databaseController.php';
+		include '../target_hunter/db_connect/databaseController.php';
 		$fileName = $_POST['restoreField'];
 		Restore_Table($fileName);
 	}
@@ -156,6 +148,7 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn'])
 //Sends user back to login page
 function logout()
 {
+	// location.replace('http://137.45.192.80/login.php');
 	location.replace('http://localhost/370_Project/login.php');
 }
 </script>
