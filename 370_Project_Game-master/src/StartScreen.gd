@@ -57,24 +57,22 @@ func _on_dataDownload_completed(result, response_code, headers, body):
 
 #Change the theme based on which is currently is
 func _on_ChangeTheme_pressed():
-	if global.availableThemes == "Both":
 		#Switch to Space
 		if global.themeLabel == "Carnival":
 			global.themeLabel   = "Space"
-			global.currentTheme = spaceTheme
-			global.currentBackground = spaceBackground
+			global.currentTheme = preload("res://themes/SpaceTheme.tres")
+			global.currentBackground = preload("res://assets/spaceBG.jpg")
 		
 		#Switch to Carnival
 		elif global.themeLabel == "Space":
 			global.themeLabel   = "Carnival"
-			global.currentTheme = carnivalTheme
-			global.currentBackground = carnivalBackground
+			global.currentTheme = preload("res://themes/CarnivalTheme.tres")
+			global.currentBackground = preload("res://assets/carnivalBG.jpg")
 		
 		#Update the background and the UI to match the current theme
 		$background.texture = global.currentBackground
 		$Panel.theme = global.currentTheme
-	else:
-		print("Theme restricted by admin")
+
 
 
 #Exit button was clicked, try to exit the game

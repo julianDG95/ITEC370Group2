@@ -19,7 +19,7 @@ var TargetData = preload("res://src/TargetData.gd")
 
 # Initialize the theme to Carnival by default
 var themeLabel = "Carnival"
-var availableThemes
+var availableThemes = "Both"
 
 var windowSize
 var currentTargetSize = 0.0
