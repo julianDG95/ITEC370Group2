@@ -41,10 +41,6 @@ $currentVelDirections = $currentData['0']["VDIR"];
 $currentDistances = $currentData['0']["DIST"];
 $currentSpeed = $currentData['0']["SPEED"];
 $currentSizes = $currentData['0']["SIZE"];
-$currentScoreMulti = $currentData['0']["SCORE"];
-$currentSkin = $currentData['0']["SKIN"];
-$currentGameMode = $currentData['0']["MODE"];
-$currentTimeLimit = $currentData['0']["TIME"];	
 
 
 if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) 
