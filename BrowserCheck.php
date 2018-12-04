@@ -3,12 +3,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Browser Check</title>
-<!--Bootstrap Styling-->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link href="Style.css" rel="stylesheet" type="text/css"/>
 </head>
 <?php
-print_r(get_browser_properties());
+//print_r(get_browser_properties());
 ?>
 
 <?php 
@@ -47,8 +44,18 @@ $split =explode(' ',$split1[1]);
 $browser['version'] = $split[0]; 
 }
 
-return $browser;
+return $browser['browser'];
 }
+?>
+
+<?php
+ $message = "";
+ $browser = get_browser_properties();
+ if($browser != "Google Chrome")
+ {
+	 $message = "Target Aqusition is not supported on this browser";
+	 echo "<script type='text/javascript'>alert('$message');</script>";
+ }
 ?>
 
 <body>

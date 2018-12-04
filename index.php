@@ -1,0 +1,136 @@
+<!--
+/*
+ *  ITEC 370: Spring 2018
+ *	Final Code: Homepage
+ *  Andrew McGuiness, Andrew Albanese, Ryan Kelley, Michael Hall
+ *	
+ *  Original design by:
+ *	Identity by HTML5 UP
+ *	html5up.net | @ajlkn
+ *	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+*/
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!--  Style sheet used as a template from https://html5up.net/identity -->
+    <link rel="stylesheet" href="main.css"/>
+	
+	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <title>index</title>
+    <?php
+		require_once("BrowserCheck.php");
+	?>
+</head>
+
+<body onLoad="getBrowser()" class="is-loading">
+<script>
+function getBrowser(){
+  var browser = <?php echo get_browser_properties();?>
+  alert(browser);
+}
+</script>
+<div id="wrapper">
+    <section id="main">
+        
+        <!-- Display the balloon picture -->
+        <header>
+            <span class="avatar">
+                <img src="images/logo.png" alt=""/>
+            </span>
+            <h1>Target Hunter</h1>
+        </header>
+        
+        
+        <!-- Begin input form -->
+        <form method="post" action="target_hunter/TargetHunter.php">
+            <!-- Input Selector -->
+            <div class="field">
+                <div class="select-wrapper">
+                    <select name="inputSelect" id="inputSelect">
+                        <option value="">Input Device</option>
+                        <option value="mouse">Mouse</option>
+                        <option value="touch">Touch Screen</option>
+                        <option value="trackPad">Track Pad</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Age Selector -->
+            <div class="field">
+                <div class="select-wrapper">
+                    <select name="ageSelect" id="ageSelect">
+                        <option value="">Age Group</option>
+                        <option value="age1">13-18</option>
+                        <option value="age2">19-27</option>
+                        <option value="age3">28-35</option>
+                        <option value="age4">36-45</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Skill level selector -->
+            <div class="field">
+                <div class="select-wrapper">
+                    <select name="skillSelect" id="skillSelect">
+                        <option value="">Skill Level</option>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="experienced">Experienced</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Submit the information to the DB script -->
+            <ul class="actions">
+                <li><input id="submitButton" class="button" type="submit" value="Submit" disabled></li>
+            </ul>
+        </form>
+        <!-- End of the Input Form -->
+        
+        <hr/>
+    </section>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    //Animate the loading of the page, based on code from https://html5up.net/identity
+    if ('addEventListener' in window) {
+        window.addEventListener('load', function () {
+            document.body.className = document.body.className.replace(/\bis-loading\b/, '');
+        });
+        document.body.className += (navigator.userAgent.match(/(MSIE|rv:11\.0)/) ? ' is-ie' : '');
+    }
+    //Validate that all the inputs are filled
+    $(function () {
+        //Set button disabled
+        $("input[type=submit]").attr("disabled", "disabled");
+        //Whenever a select is changed, execute
+        $("select").change(function () {
+            var valid = false;
+            // Make sure none of the selectors are empty
+            if ($("#ageSelect").val() != ""
+                &&
+                $("#skillSelect").val() != ""
+                &&
+                $("#inputSelect").val() != "") {
+                // They are all filled, so the form is in a valid state
+                valid = true;
+            }
+            //If form is validated enable the submit button
+            if (valid) {
+                $("input[type=submit]").removeAttr("disabled");
+            }
+        });
+    })
+</script>
+
+</body>
+</html>
