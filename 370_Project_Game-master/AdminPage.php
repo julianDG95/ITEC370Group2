@@ -1,27 +1,6 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Admin Page</title>
-<!--Bootstrap Styling-->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link href="Style.css" rel="stylesheet" type="text/css"/>
-</head>
-
-<body>
-<!--Should be a validation check here ( in javascript block) -->
-
-<script>
-//Sends user back to login page
-function logout()
-{
-	location.replace('http://localhost/370_Project/login.php');
-}
-</script>
 
 <?php
-include 'createConnection.php';
+include '../db_connect/createConnection.php';
 $conn = ConnectToDB();
 $query = 'SELECT * FROM `test_data` ';
 $result = $conn->query($query);
@@ -41,6 +20,7 @@ $currentVelDirections = $currentData['0']["VDIR"];
 $currentDistances = $currentData['0']["DIST"];
 $currentSpeed = $currentData['0']["SPEED"];
 $currentSizes = $currentData['0']["SIZE"];
+
 
 
 if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) 
@@ -119,39 +99,38 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn'])
 	header("Refresh:0");
 }else if( $_SERVER["REQUEST_METHOD"] == "POST"){
 	if(isset($_POST['exportBtn'])){
-		echo 'Got export';		
-		
-		$myFile = "dataFile.csv";
-		$fo = fopen($myFile, 'w') or die("can't open file");
-		$columns = array("ID", "input", "age", "skill", "score", "theme", "Targets");
-		$rows = array();
-		$result = $conn->query($query);
-		while ($row = $result->fetch_assoc()) {
-			$rows[] = $row;    // Add the row to rows
-		}
-		fwrite($fo, json_encode($rows, JSON_PRETTY_PRINT));
-		fclose($fo);
-	
-		if(file_exists($file)){
+		gc_collect_cycles();
+		unlink('C:/xampp/htdocs/databaseFile.csv');
+		$query = "SELECT * INTO OUTFILE 'C:/xampp/htdocs/databaseFile.csv'
+		FIELDS TERMINATED BY ','
+		LINES TERMINATED BY '\n'
+		FROM test_data;"; 
+		$valid = $conn->query($query);
+
+		if (!$valid) {
+			die("Failed to get data from database");
+		} 
+		if(file_exists('C:/xampp/htdocs/databaseFile.csv')){
 			header('Content-Type: text/csv');
-			header('Content-Length: '.filesize($file));
-			header('Content-Disposition: attachment; filename='.$file);
-			readfile($file);
+			header('Content-Length: '.filesize('C:/xampp/htdocs/databaseFile.csv'));
+			header('Content-Disposition: attachment; filename='.'dataFile.csv');
+			readfile('C:/xampp/htdocs/databaseFile.csv');
 			exit;
 		}
+		
 	}
 	
 	if(isset($_POST['deleteBtn'])){
 		echo 'Got delete';		
-		include '/db_connect/databaseController.php';
+		include '../db_connect/databaseController.php';
 		DeleteData();
 	}
 	
 	if(isset($_POST['restoreBtn'])){
 		echo 'Got restore';		
-		include '/db_connect/databaseController.php';
+		include '../db_connect/databaseController.php';
 		$fileName = $_POST['restoreField'];
-		RestoreTable($fileName);
+		Restore_Table($fileName);
 	}
 	
 	// Create and get dataFile.csv ready to write.
@@ -159,6 +138,27 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn'])
 }	
 	
 ?>
+<!DOCTYPE HTML5>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Page</title>
+<!--Bootstrap Styling-->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="Style.css" rel="stylesheet" type="text/css"/>
+</head>
+
+<body>
+<!--Should be a validation check here ( in javascript block) -->
+
+<script>
+//Sends user back to login page
+function logout()
+{
+	location.replace('http://localhost/370_Project/login.php');
+}
+</script>
 
 <h3 align="center">Target Acquisition Administrative Panel</h3>
 <div class="topnav">
