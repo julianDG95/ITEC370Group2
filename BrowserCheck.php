@@ -3,9 +3,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Browser Check</title>
-<!--Bootstrap Styling-->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link href="Style.css" rel="stylesheet" type="text/css"/>
 </head>
 <?php
 //print_r(get_browser_properties());
