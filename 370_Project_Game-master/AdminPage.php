@@ -183,11 +183,11 @@ function logout()
          </tr>
          <tr>
            <td>Direction:</td>
-           <td><input type="text" name="directionField" pattern="[N, E, S, W, NE, NW, SE, SW]{1}[[,][N, E, S, W, NE, NW, SE, SW]]" placeholder="XX"/></td>
+           <td><input type="text" name="directionField" pattern="[N, E, S, W, NE, NW, SE, SW]{1}[[,][N, E, S, W, NE, NW, SE, SW]]" placeholder="XX,XX"/></td>
          </tr>
 		 <tr>
            <td>Velocity Direction:</td>
-           <td><input type="text" name="velocityDirectionField" pattern="[N, E, S, W, NE, NW, SE, SW]{1}[[,][N, E, S, W, NE, NW, SE, SW]]" placeholder="XX"/></td>
+           <td><input type="text" name="velocityDirectionField" pattern="[N, E, S, W, NE, NW, SE, SW]{1}[[,][N, E, S, W, NE, NW, SE, SW]]" placeholder="XX,XX"/></td>
          </tr>
 	 <tr>
 	 	<td>Distance:</td>
@@ -195,7 +195,7 @@ function logout()
 	</tr>
          <tr>
            <td>Size:</td> <!-- Changes range of sizes, if only one size is allowed set both values to the same value-->
-           <td><input type="text" name="sizeField" /></td>
+           <td><input type="text" name="sizeField" placeholder="#-#" /></td>
          </tr>
          <tr>
            <td colspan="2"><input type="submit" name="submit" value="Change Settings"></td>
@@ -208,18 +208,20 @@ function logout()
 <div class="container-fluid col-sm-4 columns">
   <div class="panel">
     <form method="post" action="">
-      <table>
-         <tr>
-           <td><input type="submit" class="button" name='exportBtn' value="Export to CSV"/></td>
-         </tr>
-         <tr>
-           <td><input type="submit" name='deleteBtn' value="Delete Current Database"/></td>
-         </tr>
-         <tr>
-           <td><input type="submit" name='restoreBtn' value="Restore Database"/></td>
+      <table align="center">
+         <p>
+           <input type="submit" class="button" name='exportBtn' value="Export to CSV"/>
+         </p>
+         <p>
+           <input type="submit" name='deleteBtn' value="Delete Current Database"/>
+         </p>
+         <p>
+           <input type="submit" name='restoreBtn' value="Restore Database"/> 
+		 </p>
+		 <p>
 		   <td>File to restore:</td>
-		   <tc><input type="text" name='restoreField' value=""/></td>
-         </tr>
+		   <td><input type="text" name='restoreField' style="width:80px;" value=""/></td>
+         </p>
       </table>
     </form>
   </div>
