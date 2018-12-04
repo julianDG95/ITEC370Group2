@@ -21,19 +21,21 @@ function logout()
 </script>
 
 <?php
+include 'createConnection.php';
+$conn = ConnectToDB();
+$query = 'SELECT * FROM `test_data` ';
+$result = $conn->query($query);
+
 //Reset all variables
 $distanceNew = "";
 $directionNew = "";
 $velDirectionNew = "";
 $speedNew = "";
 $sizeNew = "";
-$scoreNew = "";
-$skinNew = "";
-$timeLimitNew = "";
-$gameModeNew = "";
+
 $currentDataJSON = file_get_contents('currentData.json');
 $currentData = json_decode($currentDataJSON, true);
-//echo '<pre>' . print_r($currentData, true) . '</pre>';
+
 $currentDirections = $currentData['0']["DIR"];
 $currentVelDirections = $currentData['0']["VDIR"];
 $currentDistances = $currentData['0']["DIST"];
@@ -43,7 +45,11 @@ $currentScoreMulti = $currentData['0']["SCORE"];
 $currentSkin = $currentData['0']["SKIN"];
 $currentGameMode = $currentData['0']["MODE"];
 $currentTimeLimit = $currentData['0']["TIME"];	
-if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !isset($_POST['deleteBtn'])) {
+
+
+if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) 
+										  and !isset($_POST['deleteBtn']) 
+									      and !isset($_POST['restoreBtn'])) {
 	if (!(empty($_POST['distanceField']))) {
 		$distanceNew = $_POST['distanceField'];
 		shell_exec("python changeDistance.py $distanceNew");
@@ -53,6 +59,7 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
 		$currentSpeed = $speedNew;
 		echo 'Wrote distance to file.';
 	} 
+	
 	if (!(empty($_POST['directionField']))) {
 		$directionNew = $_POST['directionField'];
 		shell_exec("python changeDirection.py $directionNew");
@@ -82,6 +89,7 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
 		$currentSize = $sizeNew;
 		echo 'Wrote size to file.';
 	} 
+	
 	if (!(empty($_POST['scoreField']))) {
 		$scoreNew = $_POST['scoreField'];
 		echo $scoreNew;
@@ -91,6 +99,7 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
 		$currentScore = $scoreNew;
 		echo 'Wrote score to file.';
 	}
+	
 	if (!(empty($_POST['speedField']))) {
 		$speedNew = $_POST['speedField'];
 		shell_exec("python changeSpeed.py $speedNew");
@@ -100,6 +109,7 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
 		$currentSpeed = $speedNew;
 		echo 'Wrote speed to file.';
 	}
+	
 	if (!(empty($_POST['timeField']))) {
 		$timeNew = $_POST['timeField'];
 		$currentData['0']["TIME"] = $timeNew;
@@ -108,27 +118,50 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
 		$currentSpeed = $timeNew;
 		echo 'Wrote time to file.';
 	}  
+	
 	//Always refreshes page
 	header("Refresh:0");
-}
+}else if( $_SERVER["REQUEST_METHOD"] == "POST"){
 	if(isset($_POST['exportBtn'])){
 		echo 'Got export';		
-		$file = 'data.csv';
+		
+		$myFile = "dataFile.csv";
+		$fo = fopen($myFile, 'w') or die("can't open file");
+		$columns = array("ID", "input", "age", "skill", "score", "theme", "Targets");
+		$rows = array();
+		$result = $conn->query($query);
+		while ($row = $result->fetch_assoc()) {
+			$rows[] = $row;    // Add the row to rows
+		}
+		fwrite($fo, json_encode($rows, JSON_PRETTY_PRINT));
+		fclose($fo);
+	
 		if(file_exists($file)){
 			header('Content-Type: text/csv');
 			header('Content-Length: '.filesize($file));
 			header('Content-Disposition: attachment; filename='.$file);
 			readfile($file);
-		exit;
+			exit;
 		}
 	}
+	
 	if(isset($_POST['deleteBtn'])){
 		echo 'Got delete';		
-		$file = 'data.csv';
-		if(file_exists($file)){
-			rename($file, "backup.csv");	
-		}
+		include '/db_connect/databaseController.php';
+		DeleteData();
 	}
+	
+	if(isset($_POST['restoreBtn'])){
+		echo 'Got restore';		
+		include '/db_connect/databaseController.php';
+		$fileName = $_POST['restoreField'];
+		RestoreTable($fileName);
+	}
+	
+	// Create and get dataFile.csv ready to write.
+
+}	
+	
 ?>
 
 <h3 align="center">Target Acquisition Administrative Panel</h3>
@@ -148,12 +181,6 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
 	<p>Allowed Velocity Directions: <?php echo $currentVelDirections;?></p>
     <p>Allowed Distances: <?php echo $currentDistances;?></p>
     <p>Sizes: <?php echo $currentSizes;?></p>
-	<!--
-    <p>Time Limit: <?php echo $currentTimeLimit;?></p>
-	<p>Score Multiplier: <?php echo $currentScoreMulti;?></p>
-    <p>Skin: <?php echo $currentSkin;?></p>
-    <p>Game Mode: <?php echo $currentGameMode;?></p>
-    -->
   </div>
 </div>
 
@@ -177,37 +204,10 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
 	 	<td>Distance:</td>
 		<td><input type="text" name="distanceField" value="" placeholder="#-#"/></td>
 	</tr>
-         <!-- <tr>
-           <td>Score Multiplier:</td> <!-- Changes score modifier, must be a decimal value that will multiply the default score per target clicked-- 
-           <td><input type="number" name="scoreField" pattern="[0-9]{1}[.]{1,1}[0-9]{1,3}"/></td>
-         </tr> -->
          <tr>
            <td>Size:</td> <!-- Changes range of sizes, if only one size is allowed set both values to the same value-->
            <td><input type="text" name="sizeField" /></td>
          </tr>
-		 
-<!--	Comment out the currently unfunctional parts 
-         <tr>
-           <td>Time:</td> <!-- Set seconds, only allows 1-3 digits--
-           <td><input type="text" name="timeField" pattern="[0-9]{1,3}"/></td>
-         </tr>
-         <tr>
-           <td>Change Skin:</td> <!-- Choose skin via radio button --
-           <td><input type="radioButton" name="skinRadioBtn"></td>
-         </tr>
-         <tr>
-           <td>Change Sound:</td>`
-           <td><input type="file" id="SoundBrowse"></td>
-         </tr>
-         <tr>
-           <td>Game Mode:</td>
-           <td>
-             <select name="ModeSelect">
-               <option value="Default">Default</option>
-             </select>
-           </td>
-         </tr>
--->
          <tr>
            <td colspan="2"><input type="submit" name="submit" value="Change Settings"></td>
          </tr>
@@ -227,7 +227,9 @@ if ( $_SERVER["REQUEST_METHOD"] == "POST" and !isset($_POST['exportBtn']) and !i
            <td><input type="submit" name='deleteBtn' value="Delete Current Database"/></td>
          </tr>
          <tr>
-           <td><input type="button" name='restoreBtn' value="Restore Database"/></td>
+           <td><input type="submit" name='restoreBtn' value="Restore Database"/></td>
+		   <td>File to restore:</td>
+		   <tc><input type="text" name='restoreField' value=""/></td>
          </tr>
       </table>
     </form>
